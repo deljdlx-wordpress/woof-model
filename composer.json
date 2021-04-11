@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Woof\\Models\\": "./class/Models",
+            "Woof\\WPModels\\": "./class/WPModels"
+        }
+    },
+    "require": {
+
+    },
+    "config": {
+        "vendor-dir": "static-vendor"
+    }
+}
