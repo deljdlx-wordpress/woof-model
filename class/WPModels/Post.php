@@ -79,6 +79,11 @@ class Post
         return get_the_post_thumbnail_url($this->getId(), $size);
     }
 
+    public function getURL()
+    {
+        return get_the_permalink($this->getId());
+    }
+
     /**
      * @return User
      */
