@@ -31,6 +31,11 @@ class Post extends Manager
         return $instance->getAllByStatus('draft');
     }
 
+    public static function getAllInherit() {
+        $instance = static::getInstance();
+        return $instance->getAllByStatus('inherit');
+    }
+
 
     public function loadAll()
     {
