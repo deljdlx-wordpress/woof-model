@@ -13,7 +13,9 @@ class Taxonomy extends Manager
 
     public function loadAll()
     {
+        return get_taxonomies([
 
+        ]);
     }
 
     public static function getByName($name)
@@ -27,7 +29,4 @@ class Taxonomy extends Manager
         );
         return $taxonomy;
     }
-
-
-
 }
