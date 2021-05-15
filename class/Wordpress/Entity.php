@@ -38,6 +38,23 @@ class Entity
         $this->loadManager();
     }
 
+    public function getId()
+    {
+        if(property_exists($this, 'ID')) {
+            return $this->ID;
+        }
+        elseif(property_exists($this, 'id')) {
+            return $this->id;
+        }
+        elseif(property_exists($this, 'name')) {
+            return $this->name;
+        }
+
+        return false;
+    }
+
+
+
     protected function loadManager()
     {
         $classBaseName = basename(str_replace('\\', '/', get_class($this)));

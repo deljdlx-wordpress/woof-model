@@ -14,32 +14,31 @@ class PostType extends Manager
      */
     protected $items = null;
 
+    protected $itemsByAttribute = [];
     protected $itemsByName = [];
 
 
 
-    public static function getByName($name)
+    public static function getByPostId($postId)
     {
+        $postTypeName = get_post_type($postId, 'objects');
 
-        $instance = static::getInstance();
-
-        if(isset($instance->itemsByName[$name])) {
-            return $instance->itemsByName[$name];
-        }
-
-        if($instance->items !== null) {
-            if(isset($instance->items[$name])) {
-                $instance->itemsByName[$name] = $instance->items[$name];
-                return $instance->itemsByName[$name];
+        $postType = static::getByAttributeValue(
+            'name',
+            $postTypeName,
+            function($name) {
+                $postType = get_post_types(
+                    [
+                        'name' => $name,
+                    ],
+                    'objects'
+                );
+                return reset($postType);
             }
-        }
-
-        $data = get_post_types([$name], 'objects');
-        $postType = new WPModelsPostType();
-        $postType->loadFromWordpress($data[0]);
-        $instance->itemsByName[$postType->name] = $postType;
-        return $instance->itemsByName[$name];
+        );
+        return $postType;
     }
+
 
 
     public static function exists($name)
@@ -59,17 +58,7 @@ class PostType extends Manager
      */
     public function loadAll()
     {
-
-        $data = get_post_types([], 'objects');
-
-        $this->items = [];
-        foreach($data as $name => $postTypeDescriptor) {
-            $postType = new WPModelsPostType();
-            $postType->loadFromWordpress($postTypeDescriptor);
-            $this->items[$postType->name] = $postType;
-        }
-
-        return $this->items;
+        return get_post_types([], 'objects');
     }
 
 

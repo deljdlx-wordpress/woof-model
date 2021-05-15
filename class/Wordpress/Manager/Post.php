@@ -17,29 +17,7 @@ class Post extends Manager
     /**
      * @var WordpressPost[]
      */
-    protected $itemsByStatus = [];
-    protected $itemsByType = [];
-
-
-
-    public static function getAllByType($type) {
-        $instance = static::getInstance();
-
-        if(!isset($instance->itemsByType[$type])) {
-            $instance->loadByType($type);
-        }
-        return $instance->itemsByType[$type];
-    }
-
-
-    public static function getAllByStatus($status) {
-        $instance = static::getInstance();
-
-        if(!isset($instance->itemsByStatus[$status])) {
-            $instance->loadByStatus($status);
-        }
-        return $instance->itemsByStatus[$status];
-    }
+    protected $itemsByAttribute = [];
 
 
     public static function getAllPublish() {
@@ -56,57 +34,41 @@ class Post extends Manager
 
     public function loadAll()
     {
-        $this->items = [];
-
-        $posts = get_posts([
+        return get_posts([
             'numberposts' => -1,
             'post_type' => 'any',
             'post_status' => 'all'
         ]);
+    }
 
-        foreach($posts as $post) {
-            $object = new WordpressPost();
-            $object->loadFromWordpress($post);
-            $this->items[$object->getId()] = $object;
-        }
-        return $this->items;
+    public static function getAllByType($type) {
+
+        return static::getByAttributeValue(
+            'type',
+            $type,
+            function($type) {
+                return get_posts([
+                    'numberposts' => -1,
+                    'post_type' => 'any',
+                    'post_status' => $type
+                ]);
+            }
+        );
     }
 
 
-    public function loadByStatus($status)
-    {
-        $this->itemsByStatus[$status] = [];
-
-        $posts = get_posts([
-            'numberposts' => -1,
-            'post_type' => 'any',
-            'post_status' => $status
-        ]);
-
-        foreach($posts as $post) {
-            $object = new WordpressPost();
-            $object->loadFromWordpress($post);
-            $this->itemsByStatus[$status][$object->getId()] = $object;
-        }
-        return $this->itemsByStatus[$status];
-    }
-
-    public function loadByType($type)
-    {
-        $this->itemsByType[$type] = [];
-
-        $posts = get_posts([
-            'numberposts' => -1,
-            'post_type' => 'any',
-            'post_status' => $type
-        ]);
-
-        foreach($posts as $post) {
-            $object = new WordpressPost();
-            $object->loadFromWordpress($post);
-            $this->itemsByType[$type][$object->getId()] = $object;
-        }
-        return $this->itemsByType[$type];
+    public static function getAllByStatus($status) {
+        return static::getByAttributeValue(
+            'status',
+            $status,
+            function($status) {
+                return get_posts([
+                    'numberposts' => -1,
+                    'post_type' => 'any',
+                    'post_status' => $status
+                ]);
+            }
+        );
     }
 
 }

@@ -9,31 +9,23 @@ class Taxonomy extends Manager
 {
     protected static $instance;
     protected $items = null;
-
-    protected $taxonomiesByName = [];
+    protected $itemsByAttribute = [];
 
     public function loadAll()
     {
 
-
     }
-
 
     public static function getByName($name)
     {
-        $instance = static::getInstance();
-
-        $instance->taxonomiesByName[$name] = [];
-
-        $wpTaxonomies = get_taxonomy($name);
-
-        $taxonomy = new WordpressTaxonomy();
-        $taxonomy->loadFromWordpress($wpTaxonomies);
-        $instance->taxonomiesByName[$name] = $taxonomy;
-
-
-
-        return $instance->taxonomiesByName[$name];
+        $taxonomy = static::getByAttributeValue(
+            'name',
+            $name,
+            function($name) {
+                return get_taxonomy($name);
+            }
+        );
+        return $taxonomy;
     }
 
 

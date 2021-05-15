@@ -9,13 +9,12 @@ class Role extends Manager
     protected static $instance;
 
     protected $items;
-    protected $rolesByName = [];
+    protected $itemsByAttribute = [];
 
     public function loadAll()
     {
-        $this->items = [];
-
         $wpRoles = wp_roles();
+        return $wpRoles->roles;
 
         foreach($wpRoles->roles as $id => $roleData) {
 

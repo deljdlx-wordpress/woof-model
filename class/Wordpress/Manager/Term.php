@@ -10,45 +10,27 @@ class Term extends Manager
     protected static $instance;
     protected $items = null;
 
-    protected $termsByPostId = [];
+    protected $itemsByAttribute = [];
 
     public function loadAll()
     {
-
-        $this->items = [];
-
-        $wpTerms = get_terms([
+        return get_terms([
             // 'taxonomy' => 'categories',
             'number' => 0,
             'hide_empty' => false,
         ]);
-
-        foreach($wpTerms as $termData) {
-            $term = new WordpressTerm();
-            $term->loadFromWordpress($termData);
-            $this->items[$term->getId()] = $term;
-        }
-
-        return $term;
     }
 
 
     public static function getByPostId($postId)
     {
-
-        $instance = static::getInstance();
-
-        $instance->termsByPostId[$postId] = [];
-
-        $terms = get_the_category($postId);
-        foreach($terms as $termData) {
-            $term = new WordpressTerm();
-            $term->loadFromWordpress($termData);
-
-            $instance->termsByPostId[$postId][$term->getId()] = $term;
-        }
-
-        return $instance->termsByPostId[$postId];
+        return static::getByAttributeValue(
+            'postId',
+            $postId,
+            function($postId) {
+                return get_the_category($postId);
+            }
+        );
     }
 
 

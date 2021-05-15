@@ -126,9 +126,11 @@ class Post extends Entity
      */
     public function getType()
     {
+
         if($this->postType === null) {
-            $this->postType = PostType::getByName($this->post_type);
+            $this->postType = PostType::getByPostId($this->getId());
         }
+
         return $this->postType;
     }
 
