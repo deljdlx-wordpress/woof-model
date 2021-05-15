@@ -1,52 +1,47 @@
 <?php
 
-namespace Woof\WPModels;
+namespace Woof\Model\Wordpress;
 
+use Woof\Model\Wordpress\Manager\Role as ManagerRole;
 use WP_Roles;
 
-class Role
+class Role extends Entity
 {
 
     /**
     * @var string
     */
-    protected $name;
+    public $name;
+    public $capabilities;
 
     /**
     * @var string
     */
-    protected $label;
-
-    protected $capabilities = null;
-
-    /**
-     * @var \WP_Role
-     */
-    private $wordpressRole;
-
-    /**
-     * @var WP_Roles
-     */
-    private $driver;
+    protected $id;
 
 
-    public function __construct($name = null, $label = null)
+
+    public function getId()
     {
-        $this->driver = new WP_Roles();
-        $this->name = $name;
-        $this->label = $label;
+        return $this->id;
     }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
 
     public function loadByName($name)
     {
-        $role = $this->driver->get_role($name);
-        $this->name = $role->name;
-        $this->wordpressRole = $role;
-
-        $this->capabilities = &$this->wordpressRole->capabilities;
+        $role = ManagerRole::getByName($name);
+        foreach($role as $attribute => $value) {
+            $this->$attribute = $value;
+        }
 
         return $this;
     }
+
 
     public function setCapability($capabilityName, $value)
     {

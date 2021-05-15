@@ -1,24 +1,39 @@
 <?php
 
-namespace Woof\Models;
+namespace Woof\Model\ORM;
 
 use Illuminate\Database\Capsule\Manager;
+use Woof\Model\Wordpress\Database as WordpressDatabase;
 
 class Database
 {
     public static $prefix;
 
+
+    /**
+     * Eloquent manager
+     * @var Manager
+     */
+
     private $driver;
+
+
+    /**
+     * Wordpress database access
+     *
+     * @var WordpressDatabase
+     */
     private $wordpressDriver;
 
-    public function __construct($wpdb)
+    public function __construct()
     {
-        $this->wordpressDriver = $wpdb;
-        static::$prefix = $this->wordpressDriver->prefix;
+        $this->wordpressDriver = WordpressDatabase::getInstance();
+
+        static::$prefix = $this->wordpressDriver->getWpdb()->prefix;
 
         $this->driver = new Manager();
 
-        //IMPORTANT eloquent initialization
+        // IMPORTANT eloquent initialization
         $this->driver->addConnection(
             [
                 'driver' => 'mysql',
@@ -26,7 +41,7 @@ class Database
                 'database' => \DB_NAME,
                 'username' => \DB_USER,
                 'password' => \DB_PASSWORD,
-                'charset' => $this->wordpressDriver->charset,
+                'charset' => $this->wordpressDriver->getWpdb()->charset,
                 // 'prefix' => $this->wordpressDriver->prefix
                 //'collation' => $this->wordpressDriver->collate,
 

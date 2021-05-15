@@ -1,6 +1,6 @@
 <?php
 
-namespace Woof\Models;
+namespace Woof\Model\ORM;
 
 use Illuminate\Database\Eloquent\Model;
 

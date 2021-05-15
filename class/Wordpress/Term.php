@@ -1,8 +1,11 @@
 <?php
 
-namespace Woof\WPModels;
+namespace Woof\Model\Wordpress;
 
-class Term
+use Woof\Model\Wordpress\Manager\Taxonomy;
+use Woof\Model\Wordpress\Taxonomy as WordpressTaxonomy;
+
+class Term extends Entity
 {
 
     public $term_id = null;
@@ -22,7 +25,8 @@ class Term
     public $category_nicename = null;
     public $category_parent = null;
 
-    private $wordpressTerm;
+
+    protected $taxonomyInstance;
 
 
     /**
@@ -33,9 +37,26 @@ class Term
         return $this->term_id;
     }
 
+    public function getLabel() {
+        return $this->getName();
+    }
+
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return WordpressTaxonomy
+     */
+    public function getTaxonomy()
+    {
+        if($this->taxonomyInstance === null) {
+            $this->taxonomyInstance = Taxonomy::getByName($this->taxonomy);
+        }
+        return $this->taxonomyInstance;
     }
 
     /**
@@ -53,41 +74,6 @@ class Term
     public function getWordpressTerm()
     {
         return $this->wordpressTerm;
-    }
-
-    /**
-     * @param int $id
-     * @return $this
-     */
-    public function loadById($id)
-    {
-        $wpTerm = get_term($id);
-        $this->loadFromWordpressTerm($wpTerm);
-        return $this;
-    }
-
-    /**
-     * @param \WP_Term $wpTerm
-     * @return $this
-     */
-    public function loadFromWordpressTerm($wpTerm)
-    {
-        $this->wordpressTerm = $wpTerm;
-        foreach($wpTerm as $attribute => $value) {
-            $this->$attribute = $value;
-        }
-        return $this;
-    }
-
-    /**
-     * @param \WP_Term $wpTerm
-     * @return static
-     */
-    public static function getFromWordpressTerm($wpTerm)
-    {
-        $term = new static();
-        $term->loadFromWordpressTerm($wpTerm);
-        return $term;
     }
 
 }

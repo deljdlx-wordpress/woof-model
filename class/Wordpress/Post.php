@@ -1,8 +1,14 @@
 <?php
 
-namespace Woof\WPModels;
+namespace Woof\Model\Wordpress;
 
-class Post
+use Woof\Model\Wordpress\Manager\PostType;
+use Woof\Model\Wordpress\Manager\Term;
+use Woof\Model\Wordpress\Manager\User;
+use Woof\Model\Wordpress\PostType as WordpressPostType;
+use Woof\Model\Wordpress\Term as WordpressTerm;
+
+class Post extends Entity
 {
 
     // wordpress public properties
@@ -33,9 +39,8 @@ class Post
 
 
     protected $author;
-    private $categories = null;
-
-    private $wordpressPost;
+    protected $terms = null;
+    protected $postType = null;
 
 
     /**
@@ -57,6 +62,11 @@ class Post
     public function getTitle()
     {
         return $this->post_title;
+    }
+
+    public function getStatus()
+    {
+        return $this->post_status;
     }
 
     public function getExcerpt()
@@ -95,21 +105,32 @@ class Post
         return $this->author;
     }
 
+
+
+
     /**
-     * @return Category[]
+     *
+     * @return WordpressTerm[]
      */
-    public function getCategories()
+    public function getTerms()
     {
-        if($this->categories === null) {
-            $categories = get_the_category($this->getId());
-            $this->categories = [];
-            foreach($categories as $category) {
-                $this->categories[] = Category::getFromWordpressTerm($category);
-            }
+        if($this->terms === null) {
+            $this->terms = Term::getByPostId($this->getId());
         }
-        return $this->categories;
+        return $this->terms;
     }
 
+    /**
+     *
+     * @return WordpressPostType
+     */
+    public function getType()
+    {
+        if($this->postType === null) {
+            $this->postType = PostType::getByName($this->post_type);
+        }
+        return $this->postType;
+    }
 
     /**
      * @return $this
@@ -159,7 +180,7 @@ class Post
     public function loadById($id)
     {
         $post = get_post($id);
-        $this->loadFromWordpressPost($post);
+        $this->loadFromWordpress($post);
         return $this;
     }
 
@@ -176,65 +197,5 @@ class Post
 
     // ==========================================================================
 
-
-    /**
-     * @return \WP_Post
-     */
-    public function getWordpressPost()
-    {
-        return $this->wordpressPost;
-    }
-
-    /**
-     * @param \WP_Post $post
-     * @return $this
-     */
-    public function loadFromWordpressPost(\WP_Post $post)
-    {
-        $this->wordpressPost = $post;
-        foreach($post as $attribute => $value) {
-            $this->$attribute = $value;
-        }
-        return $this;
-    }
-
-    /**
-     * @param \WP_Post $wpPost
-     * @return static
-     */
-    public static function getFromWordpressPost(\WP_Post $wpPost)
-    {
-        $post = new static();
-        $post->loadFromWordpressPost($wpPost);
-        return $post;
-    }
-
-    /**
-     * @param string $type
-     * @param string $status
-     * @param integer $count
-     * @param string $orderBy
-     * @param string $order
-     * @return static[]
-     */
-    static public function getByType($type, $status='publish', $count = -1, $orderBy = 'date', $order = 'DESC')
-    {
-        $queryFilters = [
-            'post_type' => $type,
-            'post_status' => $status,
-            'orderby' => $orderBy,
-            'order' => $order,
-            'posts_per_page' => $count //
-        ];
-
-        $query = new \WP_Query($queryFilters);
-
-        $posts = [];
-        foreach($query->posts as $wpPost) {
-            $post = static::getFromWordpressPost($wpPost);
-            $posts[] = $post;
-        }
-
-        return $posts;
-    }
 }
+

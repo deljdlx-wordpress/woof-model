@@ -9,19 +9,14 @@ class ComposerStaticInitc0dfd3c0e3dcba37d26c8c7464089f97
     public static $prefixLengthsPsr4 = array (
         'W' => 
         array (
-            'Woof\\WPModels\\' => 14,
-            'Woof\\Models\\' => 12,
+            'Woof\\Model\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Woof\\WPModels\\' => 
+        'Woof\\Model\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/class/WPModels',
-        ),
-        'Woof\\Models\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/class/Models',
+            0 => __DIR__ . '/../..' . '/class',
         ),
     );
 

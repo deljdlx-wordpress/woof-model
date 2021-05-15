@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Woof\\WPModels\\' => array($baseDir . '/class/WPModels'),
-    'Woof\\Models\\' => array($baseDir . '/class/Models'),
+    'Woof\\Model\\' => array($baseDir . '/class'),
 );
