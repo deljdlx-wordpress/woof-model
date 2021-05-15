@@ -22,10 +22,14 @@ class PostType extends Manager
     public static function getByPostId($postId)
     {
         $postTypeName = get_post_type($postId, 'objects');
+        return static::getByName($postTypeName);
+    }
 
+
+    public static function getByName($name) {
         $postType = static::getByAttributeValue(
             'name',
-            $postTypeName,
+            $name,
             function($name) {
                 $postType = get_post_types(
                     [
