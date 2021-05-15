@@ -15,18 +15,6 @@ class Role extends Manager
     {
         $wpRoles = wp_roles();
         return $wpRoles->roles;
-
-        foreach($wpRoles->roles as $id => $roleData) {
-
-            $role = new WordpressRole();
-            $role->loadFromWordpress($roleData);
-            $role->set('id', $id);
-
-
-            $this->items[$id] = $role;
-
-        }
-        return $this->items;
     }
 
 
@@ -37,30 +25,14 @@ class Role extends Manager
 
     public static function getById($name)
     {
-        $instance = static::getInstance();
-
-        if(isset($instance->rolesByName[$name])) {
-            return $instance->rolesByName[$name];
-        }
-
-        if($instance->isLoaded()) {
-            if(isset($instance->items[$name])) {
-                $instance->rolesByName[$name] = $instance->items[$name];
-                return $instance->items[$name];
+        return static::getByAttributeValue(
+            'name',
+            $name,
+            function($name) {
+                $wpRoles = wp_roles();
+                return $wpRoles->get_role($name);
             }
-        }
-
-
-        $wpRoles = wp_roles();
-        $roleData = $wpRoles->get_role($name);
-
-        $role = new WordpressRole();
-        $role->loadFromWordpress($roleData);
-        $role->set('id', $name);
-
-        $instance->rolesByName[$name] = $role;
-
-        return $role;
+        );
     }
 
 }

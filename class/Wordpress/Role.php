@@ -23,7 +23,7 @@ class Role extends Entity
 
     public function getId()
     {
-        return $this->id;
+        return $this->name;
     }
 
     public function getName()

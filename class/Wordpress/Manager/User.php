@@ -9,27 +9,16 @@ class User extends Manager
     protected static $instance;
 
     protected $items;
+    protected $itemsByAttribute = [];
 
     /**
      * @return WordpressUser[]
      */
     public function loadAll()
     {
-        $this->items = [];
 
-        $data = get_users([
-
+        return get_users([
         ]);
-
-        foreach($data as $userData) {
-
-            $user = new WordpressUser();
-            $user->loadFromWordpress($userData);
-
-            $this->items[$user->getId()] = $user;
-        }
-
-        return $this->items;
     }
 
 
@@ -46,49 +35,20 @@ class User extends Manager
     }
 
 
-
     /**
      * @param int $id
      * @return WordpressUser
      */
     public static function getById($id)
     {
-
-        $instance = static::getInstance();
-
-        if(isset($instance->userById[$id])) {
-            return $instance->userById[$id];
-        }
-
-
-        $userData = get_user_by('id', $id);
-        $user = new WordpressUser();
-        $user->loadFromWordpress($userData);
-        $instance->userById[$user->getId()] = $user;
-        return $user;
+        return static::getByAttributeValue(
+            'id',
+            $id,
+            function($id) {
+                return get_user_by('id', $id);
+            }
+        );
     }
-
-
-
-
-
-
-     /*
-    static public function getByIds(array $userIds)
-    {
-        $wpUsers = get_users([
-            'include' => $userIds
-        ]);
-
-        $users = [];
-        foreach($wpUsers as $wpUser) {
-            $users[] = static::getFromWordpressUser($wpUser);
-        }
-        return $users;
-    }
-    */
-
-
 
 
     // DOC récupération liste  de users https://developer.wordpress.org/reference/functions/get_users/
