@@ -21,11 +21,6 @@ class Role extends Entity
 
 
 
-    public function getId()
-    {
-        return $this->name;
-    }
-
     public function getName()
     {
         return $this->name;

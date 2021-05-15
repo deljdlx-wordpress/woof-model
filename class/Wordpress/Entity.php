@@ -7,6 +7,12 @@ use Woof\Model\Wordpress\Manager\Manager;
 
 class Entity
 {
+
+
+
+    public $__id;
+
+
     /**
      * Wordpress native object
      */
@@ -40,14 +46,16 @@ class Entity
 
     public function getId()
     {
+
+        if($this->__id !== null) {
+            return $this->__id;
+        }
+
         if(property_exists($this, 'ID')) {
             return $this->ID;
         }
         elseif(property_exists($this, 'id')) {
             return $this->id;
-        }
-        elseif(property_exists($this, 'name')) {
-            return $this->name;
         }
 
         return false;

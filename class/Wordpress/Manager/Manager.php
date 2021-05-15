@@ -39,7 +39,7 @@ abstract class Manager
      *
      * @return WPModelsPostType[]
      */
-    public static function getAll($byId = false)
+    public static function getAll($byId = true)
     {
         $instance = static::getInstance();
 
@@ -49,11 +49,18 @@ abstract class Manager
 
             $wpInstances = $instance->loadAll();
 
-            foreach($wpInstances as $wpData) {
+            foreach($wpInstances as $key => $wpData) {
                 $entity = static::getEntity();
                 $entity->loadFromWordpress($wpData);
-                if($byId)  {
-                    $instance->items[$entity->getId()] = $entity;
+                if($byId !== 0)  {
+                    $id = $entity->getId();
+
+                    if(!$id) {
+                        $id = $key;
+                        $entity->__id = $key;
+                    }
+
+                    $instance->items[$id] = $entity;
                 }
                 else {
                     $instance->items[] = $entity;
@@ -106,6 +113,4 @@ abstract class Manager
         $entityClassName = str_replace('Manager\\', '',  static::class);
         return new $entityClassName();
     }
-
-
 }
