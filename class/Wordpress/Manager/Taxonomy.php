@@ -13,9 +13,11 @@ class Taxonomy extends Manager
 
     public function loadAll()
     {
-        return get_taxonomies([
+        $taxonomies = get_taxonomies([
 
-        ]);
+        ], 'objects');
+        return $taxonomies;
+
     }
 
     public static function getByName($name)

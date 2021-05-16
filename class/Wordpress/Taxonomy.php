@@ -42,7 +42,7 @@ class Taxonomy extends Entity
         return $this->name;
     }
 
-    public function getLabe()
+    public function getLabel()
     {
         return $this->label;
     }

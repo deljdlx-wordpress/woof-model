@@ -73,29 +73,35 @@ abstract class Manager
 
     public static function getByAttributeValue($attribute, $value, $loader)
     {
-        $instance = static::getInstance();
 
-        if(isset($instance->itemsByAttribute[$attribute][$value])) {
-            return $instance->itemsByAttribute[$attribute][$value];
+        $key = $value;
+        if(is_array($value)) {
+            $key = implode(',', $value);
         }
 
-        $instance->itemsByAttribute[$attribute][$value] = [];
+        $instance = static::getInstance();
+
+        if(isset($instance->itemsByAttribute[$attribute][$key])) {
+            return $instance->itemsByAttribute[$attribute][$key];
+        }
+
+        $instance->itemsByAttribute[$attribute][$key] = [];
 
         $wpInstances = $loader($value);
 
         if(is_array($wpInstances)) {
             foreach($wpInstances as $index => $wpInstances) {
                 $entity = static::createEntity($wpInstances);
-                $instance->itemsByAttribute[$attribute][$value][] = $entity;
+                $instance->itemsByAttribute[$attribute][$key][] = $entity;
             }
         }
         else {
             $entity = static::getEntity();
             $entity->loadFromWordpress($wpInstances);
-            $instance->itemsByAttribute[$attribute][$value] = $entity;
+            $instance->itemsByAttribute[$attribute][$key] = $entity;
         }
 
-        return $instance->itemsByAttribute[$attribute][$value];
+        return $instance->itemsByAttribute[$attribute][$key];
     }
 
     public static function createEntity($wpInstance)

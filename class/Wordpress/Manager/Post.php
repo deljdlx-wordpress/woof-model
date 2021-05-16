@@ -36,6 +36,14 @@ class Post extends Manager
         return $instance->getAllByStatus('inherit');
     }
 
+    public static function getAllActive() {
+        $instance = static::getInstance();
+        return $instance->getAllByStatus(
+            ['publish', 'future', 'draft', 'pending', 'private ']
+        );
+    }
+
+
 
     public function loadAll()
     {
