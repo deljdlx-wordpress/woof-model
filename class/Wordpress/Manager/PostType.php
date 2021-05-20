@@ -56,6 +56,7 @@ class PostType extends Manager
     }
 
 
+
     /**
      *
      * @return WPModelsPostType[]

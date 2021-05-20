@@ -46,7 +46,7 @@ class Role extends Entity
 
     public function delete()
     {
-        //DOC https://developer.wordpress.org/reference/functions/remove_role/
+        //DOC ROLE https://developer.wordpress.org/reference/functions/remove_role/
         remove_role($this->name);
         return $this;
     }

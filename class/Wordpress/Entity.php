@@ -2,12 +2,16 @@
 
 namespace Woof\Model\Wordpress;
 
+use Phi\Traits\Introspectable;
+use ReflectionClass;
 use Woof\Model\Exception;
 use Woof\Model\Wordpress\Manager\Manager;
 
 class Entity
 {
 
+
+    use Introspectable;
 
 
     public $__id;
@@ -43,6 +47,7 @@ class Entity
 
         $this->loadManager();
     }
+
 
     public function getId()
     {
