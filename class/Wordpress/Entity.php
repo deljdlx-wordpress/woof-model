@@ -6,12 +6,14 @@ use Phi\Traits\Introspectable;
 use ReflectionClass;
 use Woof\Model\Exception;
 use Woof\Model\Wordpress\Manager\Manager;
+use Woof\Model\Wordpress\Traits\Acf;
 
 class Entity
 {
 
 
     use Introspectable;
+    use Acf;
 
 
     public $__id;
@@ -44,6 +46,12 @@ class Entity
     public function __construct()
     {
         $this->wpdb = Database::getInstance();
+
+        /*
+        if(static::$fieldGroups == null) {
+            $this->loadACFFieldGroups();
+        }
+        */
 
         $this->loadManager();
     }

@@ -141,6 +141,12 @@ class PostType extends Entity
         return $this;
     }
 
+
+    public function getSupports()
+    {
+        return get_all_post_type_supports($this->getName());
+    }
+
     public function register()
     {
         // création du post type

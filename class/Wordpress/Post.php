@@ -7,9 +7,14 @@ use Woof\Model\Wordpress\Manager\Term;
 use Woof\Model\Wordpress\Manager\User;
 use Woof\Model\Wordpress\PostType as WordpressPostType;
 use Woof\Model\Wordpress\Term as WordpressTerm;
+use Woof\Model\Wordpress\Traits\Acf;
 
 class Post extends Entity
 {
+
+
+    use Acf;
+
 
     // wordpress public properties
     public $ID;
@@ -40,7 +45,17 @@ class Post extends Entity
 
     protected $author;
     protected $terms = null;
+
+    /**
+     * @var PostType
+     */
     protected $postType = null;
+
+
+    /**
+     * @var PostMeta[]
+     */
+    protected $meta = null;
 
 
     /**
@@ -103,6 +118,44 @@ class Post extends Entity
             $this->author = User::getById($this->post_author);
         }
         return $this->author;
+    }
+
+    /**
+     * @return PostMeta[]
+     */
+    public function getAllMeta()
+    {
+        if($this->meta === null) {
+
+            $this->meta = [];
+            $query = "
+            SELECT
+                post_id,
+                post_type,
+                meta_key,
+                meta_value
+            FROM
+                wp_posts,
+                wp_postmeta
+            WHERE
+            wp_posts.ID = wp_postmeta.post_id
+            AND wp_posts.ID = %d
+        ";
+
+        $results = $this->wpdb->queryAndFetch(
+            $query,
+            [$this->getId()]
+        );
+
+
+
+        foreach($results as $values) {
+            $this->meta[$values->meta_key] = new PostMeta($values->meta_key, $values->meta_value, $this);
+        }
+    }
+
+
+        return $this->meta;
     }
 
 
