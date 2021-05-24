@@ -29,14 +29,6 @@ class ACFFieldGroup extends Manager
 
             foreach($fields as $data) {
                 $field = new ACFField();
-
-                echo '<div style="border: solid 2px #F00">';
-                    echo '<div style="; background-color:#CCC">@'.__FILE__.' : '.__LINE__.'</div>';
-                    echo '<pre style="background-color: rgba(255,255,255, 0.8);">';
-                    print_r($data);
-                    echo '</pre>';
-                echo '</div>';
-
                 $field->loadFromWordpress($data);
                 $group['fields'][] = $field;
             }

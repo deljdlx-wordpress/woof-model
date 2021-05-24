@@ -119,6 +119,19 @@ class PostType extends Entity
     // ==============================================================================================================
 
 
+    public function __construct($label = null, $name = null)
+    {
+        parent::__construct();
+
+        if($label) {
+            $this->setLabel($label);
+        }
+
+        if($name !== null) {
+            $this->name = $name;
+        }
+    }
+
     public function getId()
     {
         return $this->name;
@@ -134,6 +147,10 @@ class PostType extends Entity
         return $this->label;
     }
 
+    /**
+     * @param string $label
+     * @return this
+     */
     public function setLabel($label)
     {
         $this->label = $label;

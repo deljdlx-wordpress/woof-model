@@ -25,7 +25,6 @@ class PostMeta
     }
 
 
-
     /**
      * @return string
      */
@@ -34,7 +33,10 @@ class PostMeta
         return $this->name;
     }
 
-
+    /**
+     * @param Post $post
+     * @return this
+     */
     public function setPost($post) {
         $this->post = $post;
         return $this;

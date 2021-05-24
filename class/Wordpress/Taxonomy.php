@@ -44,6 +44,30 @@ class Taxonomy extends Entity
 
 
 
+
+    public function __construct($label = null, $postTypes = null, $name = null)
+    {
+        if($label) {
+            $this->setLabel($label);
+        }
+        if($name) {
+            $this->setName($name);
+        }
+
+        if($postTypes !== null) {
+            if(is_array($postTypes)) {
+                foreach($postTypes as $postType) {
+                    $this->addPostType($postTypes);
+                }
+            }
+            else {
+                $this->addPostType($postTypes);
+            }
+        }
+
+    }
+
+
     public function getName()
     {
         return $this->name;
@@ -59,7 +83,15 @@ class Taxonomy extends Entity
     public function setLabel($label)
     {
         $this->label = $label;
-        $this->name = slugify($label);
+        if($this->name === null) {
+            $this->name = slugify($label);
+        }
+        return $this;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
         return $this;
     }
 
