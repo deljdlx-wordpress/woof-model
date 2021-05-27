@@ -51,7 +51,7 @@ class PostType extends Entity
     public $menu_icon = 'dashicons-format-aside';
     public $capability_type = 'post';
 
-    public $map_meta_cap = false;
+    public $map_meta_cap = true;
 
     public $register_meta_box_cb;
     public $taxonomies;
@@ -168,7 +168,6 @@ class PostType extends Entity
     {
         // création du post type
         add_action('init', function() {
-            // register_post_type est une méthode "native de wordpress
             register_post_type($this->name, $this->getPublicPropertiesValues());
         });
 
