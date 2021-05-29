@@ -107,7 +107,7 @@ class Entity
 
     /**
      * @param  $wordpressIntance
-     * @return $this
+     * @return this
      */
     public function loadFromWordpress($wordpressIntance)
     {
@@ -122,6 +122,20 @@ class Entity
             }
         }
         $this->loaded = true;
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $values
+     * @return this
+     */
+    public function setValues($values)
+    {
+        foreach($values as $key => $value) {
+            $this->$key = $value;
+        }
         return $this;
     }
 
