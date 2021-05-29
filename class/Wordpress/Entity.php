@@ -120,11 +120,17 @@ class Entity
             else {
                 $this->$attribute = &$wordpressIntance[$attribute];
             }
-
         }
-
         $this->loaded = true;
+        return $this;
+    }
 
+    public function loadFromEntity(Entity $entity)
+    {
+        foreach($entity as $attribute => $value) {
+            $this->$attribute = $value;
+        }
+        $this->loaded = true;
         return $this;
     }
 

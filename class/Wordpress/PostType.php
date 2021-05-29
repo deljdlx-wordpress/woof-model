@@ -2,8 +2,7 @@
 
 namespace Woof\Model\Wordpress;
 
-use ReflectionMethod;
-use ReflectionProperty;
+use Woof\Model\Wordpress\Manager\PostType as ManagerPostType;
 
 use function Woof\slugify;
 
@@ -99,6 +98,12 @@ class PostType extends Entity
     public $rest_controller;
 
 
+    /**
+     * @var ManagerPostType
+     */
+    protected $manager;
+
+
     public $supports = [
         'title',
         'editor',
@@ -130,6 +135,14 @@ class PostType extends Entity
         if($name !== null) {
             $this->name = $name;
         }
+    }
+
+    /**
+     * @return this
+     */
+    public function loadByName($name)
+    {
+        return $this->manager->getByName($name, $this);
     }
 
     public function getId()

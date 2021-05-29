@@ -26,7 +26,7 @@ class PostType extends Manager
     }
 
 
-    public static function getByName($name) {
+    public static function getByName($name, $instance = null) {
         $postType = static::getByAttributeValue(
             'name',
             $name,
@@ -40,6 +40,10 @@ class PostType extends Manager
                 return reset($postType);
             }
         );
+
+        if($instance) {
+            $instance->loadFromEntity($postType);
+        }
         return $postType;
     }
 
