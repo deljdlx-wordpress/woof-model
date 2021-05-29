@@ -54,16 +54,16 @@ class Post extends Manager
         ]);
     }
 
-    public static function getAllByType($type) {
+    public static function getAllByType($type, $status = ['publish']) {
 
         return static::getByAttributeValue(
             'type',
             $type,
-            function($type) {
+            function($type) use ($status) {
                 return get_posts([
                     'numberposts' => -1,
-                    'post_type' => 'any',
-                    'post_status' => $type
+                    'post_type' => $type,
+                    'post_status' => $status
                 ]);
             }
         );

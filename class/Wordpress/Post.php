@@ -5,6 +5,7 @@ namespace Woof\Model\Wordpress;
 use Woof\Model\Wordpress\Manager\PostType;
 use Woof\Model\Wordpress\Manager\Term;
 use Woof\Model\Wordpress\Manager\User;
+use Woof\Model\Wordpress\Entity\User as WordpressUser;
 use Woof\Model\Wordpress\PostType as WordpressPostType;
 use Woof\Model\Wordpress\Term as WordpressTerm;
 use Woof\Model\Wordpress\Traits\Acf;
@@ -60,7 +61,7 @@ class Post extends Entity
 
     /**
      * @param string $title
-     * @return $this
+     * @return this
      */
     public function setTitle($title)
     {
@@ -110,7 +111,7 @@ class Post extends Entity
     }
 
     /**
-     * @return User
+     * @return WordpressUser
      */
     public function getAuthor()
     {

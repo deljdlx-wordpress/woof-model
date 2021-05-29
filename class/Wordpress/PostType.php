@@ -2,7 +2,9 @@
 
 namespace Woof\Model\Wordpress;
 
+use Woof\Model\Wordpress\Manager\Post;
 use Woof\Model\Wordpress\Manager\PostType as ManagerPostType;
+use Woof\Model\Wordpress\Post as WordpressPost;
 
 use function Woof\slugify;
 
@@ -135,6 +137,14 @@ class PostType extends Entity
         if($name !== null) {
             $this->name = $name;
         }
+    }
+
+    /**
+     * @return WordpressPost[]
+     */
+    public function getPosts()
+    {
+        return Post::getAllByType($this->getName());
     }
 
     /**
