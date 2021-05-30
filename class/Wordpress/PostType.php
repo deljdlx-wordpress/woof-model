@@ -191,6 +191,10 @@ class PostType extends Entity
         return $this->enableSupport('excerpt');
     }
 
+    public function hideFromMenu()
+    {
+        $this->show_in_menu = false;
+    }
 
     /**
      *
