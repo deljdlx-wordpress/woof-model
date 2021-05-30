@@ -182,6 +182,38 @@ class PostType extends Entity
     }
 
 
+
+    /**
+     * @return this
+     */
+    public function enableExcerpt()
+    {
+        return $this->enableSupport('excerpt');
+    }
+
+
+    /**
+     *
+     * @param string $support
+     * @return this
+     */
+    public function enableSupport($support)
+    {
+        if(!in_array($support, $this->supports)) {
+            $this->supports[] = $support;
+        }
+        return $this;
+    }
+
+    public function disableSupport($support)
+    {
+        if(($key = array_search($support, $this->supports)) !== false) {
+            unset($this->supports[$key]);
+        }
+        return $this;
+    }
+
+
     public function getSupports()
     {
         return get_all_post_type_supports($this->getName());

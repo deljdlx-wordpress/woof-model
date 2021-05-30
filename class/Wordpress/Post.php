@@ -191,15 +191,15 @@ class Post extends Entity
     }
 
     /**
-     * @return $this
+     * @return this
      */
     public function save()
     {
-        $data = [
-            'ID' => 0,
+        $rawData = [
+            // 'ID' => 0,
             'post_author' => $this->post_author,
-            'post_date' => $this->post_date,
-            'post_date_gmt' => $this->post_date_gmt,
+            // 'post_date' => $this->post_date,
+            // 'post_date_gmt' => $this->post_date_gmt,
             'post_content' => $this->post_content,
             'post_title' => $this->post_title,
             'post_excerpt' => $this->post_excerpt,
@@ -220,6 +220,15 @@ class Post extends Entity
             'post_mime_type' => $this->post_mime_type,
             'comment_count' => $this->comment_count,
         ];
+
+        $data = [];
+        foreach($rawData as $index => $value) {
+            if($value !== null) {
+                $data[$index] = $value;
+            }
+        }
+
+
         if($this->getID()) {
             $data['ID'] = $this->getID();
             wp_insert_post($data);
