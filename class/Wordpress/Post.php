@@ -130,36 +130,32 @@ class Post extends Entity
 
             $this->meta = [];
             $query = "
-            SELECT
-                post_id,
-                post_type,
-                meta_key,
-                meta_value
-            FROM
-                wp_posts,
-                wp_postmeta
-            WHERE
-            wp_posts.ID = wp_postmeta.post_id
-            AND wp_posts.ID = %d
-        ";
+                SELECT
+                    post_id,
+                    post_type,
+                    meta_key,
+                    meta_value
+                FROM
+                    wp_posts,
+                    wp_postmeta
+                WHERE
+                wp_posts.ID = wp_postmeta.post_id
+                AND wp_posts.ID = %d
+            ";
 
-        $results = $this->wpdb->queryAndFetch(
-            $query,
-            [$this->getId()]
-        );
+            $results = $this->wpdb->queryAndFetch(
+                $query,
+                [$this->getId()]
+            );
 
 
 
-        foreach($results as $values) {
-            $this->meta[$values->meta_key] = new PostMeta($values->meta_key, $values->meta_value, $this);
+            foreach($results as $values) {
+                $this->meta[$values->meta_key] = new PostMeta($values->meta_key, $values->meta_value, $this);
+            }
         }
-    }
-
-
         return $this->meta;
     }
-
-
 
 
     /**
@@ -188,6 +184,13 @@ class Post extends Entity
         }
 
         return $this->postType;
+    }
+
+
+    public function delete($force = false)
+    {
+        wp_delete_post($this->getId(), $force);
+        return $this;
     }
 
     /**

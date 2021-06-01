@@ -111,6 +111,10 @@ class Entity
      */
     public function loadFromWordpress($wordpressIntance)
     {
+        if(!$wordpressIntance) {
+            return false;
+        }
+
         $this->wordpressIntance = $wordpressIntance;
 
         foreach($wordpressIntance as $attribute => $value) {
